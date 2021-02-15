@@ -1,0 +1,11 @@
+#cloud-config
+
+bootcmd:
+- test -z "$(blkid /dev/disk/by-id/google-gamedata)" && mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-gamedata
+- fsck.ext4 -tvy /dev/disk/by-id/google-gamedata
+- mkdir -p /mnt/disks/gamedata
+- mount -t ext4 -o discard,defaults /dev/disk/by-id/google-gamedata /mnt/disks/gamedata
+- mkdir -p /mnt/disks/gamedata/valheim
+
+runcmd:
+- docker run -d --name valheim-server -p 2456-2458:2456-2458/udp -v /mnt/disks/gamedata/valheim:/config -e SERVER_NAME="popopopo" -e WORLD_NAME="pokutuna" -e SERVER_PASS="oneetyan" lloesche/valheim-server
