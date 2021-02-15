@@ -9,6 +9,9 @@ terraform-init: terraform-backend-bucket terraform-service-account terraform/key
 terraform-service-account:
 	# ignore error if exists
 	-$(GCLOUD) iam service-accounts create terraform
+	-$(GCLOUD) projects add-iam-policy-binding $(PROJECT) \
+		--member serviceAccount:terraform@$(PROJECT).iam.gserviceaccount.com \
+		--role roles/editor
 
 .PHONY: terraform-backend-bucket
 terraform-backend-bucket:
