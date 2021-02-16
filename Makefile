@@ -29,3 +29,9 @@ terraform-backend-bucket:
 terraform/keys/$(PROJECT).json:
 	$(GCLOUD) iam service-accounts keys create ./terraform/keys/$(PROJECT).json \
 		--iam-account terraform@$(PROJECT).iam.gserviceaccount.com
+
+
+.PHONY: ssh
+ssh:
+	# hard coded zone & instance
+	$(GCLOUD) beta compute ssh --zone "asia-northeast1-b" "valheim01"
