@@ -36,7 +36,8 @@ resource "google_compute_instance" "gameserver" {
   }
 
   metadata = {
-    user-data = file("cloud-init.yaml")
+    user-data       = file("cloud-init.yaml")
+    shutdown-script = file("shutdown.sh")
   }
 }
 

@@ -6,6 +6,11 @@ bootcmd:
 - mkdir -p /mnt/disks/gamedata
 - mount -t ext4 -o discard,defaults /dev/disk/by-id/google-gamedata /mnt/disks/gamedata
 - mkdir -p /mnt/disks/gamedata/valheim
+- mkdir -p /mnt/disks/gamedata/valheim/config
+- mkdir -p /mnt/disks/gamedata/valheim/valheim_dl
 
 runcmd:
-- docker run -d --name valheim-server -p 2456-2458:2456-2458/udp -v /mnt/disks/gamedata/valheim:/config -e SERVER_NAME="popopopo" -e WORLD_NAME="pokutuna" -e SERVER_PASS="oneetyan" lloesche/valheim-server
+- docker run -d --name valheim-server -p 2456-2458:2456-2458/udp -v /mnt/disks/gamedata/valheim/config:/config -v /mnt/disks/gamedata/valheim/valheim_dl:/opt/valheim_dl -e SERVER_NAME="popopopo" -e WORLD_NAME="pokutuna" -e SERVER_PASS="oneetyan" lloesche/valheim-server
+
+# TODO
+# set log driver to Logging
