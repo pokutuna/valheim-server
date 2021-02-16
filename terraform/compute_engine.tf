@@ -7,12 +7,12 @@ resource "google_compute_disk" "gamedata" {
 
 resource "google_compute_instance" "gameserver" {
   name         = "valheim01"
-  machine_type = "n1-standard-1"
   zone         = var.zone
+  machine_type = var.instance_type
 
   boot_disk {
     initialize_params {
-      image = "cos-cloud/cos-85-lts"
+      image = "https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-85-13310-1209-10"
       type  = "pd-balanced"
       size  = 10
     }
