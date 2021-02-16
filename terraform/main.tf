@@ -7,6 +7,5 @@ provider "google" {
 
 terraform {
   backend "gcs" {
-    bucket = "times-takuya-valheim-terraform"
   }
 }
