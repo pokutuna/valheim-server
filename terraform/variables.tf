@@ -1,6 +1,6 @@
 variable "project" {
   type    = string
-  default = "times-takuya-valheim"
+  default = "fluid-unfolding-304704"
 }
 
 variable "region" {
