@@ -2,7 +2,7 @@ resource "google_compute_disk" "gamedata" {
   name = "gamedata"
   type = "pd-balanced"
   zone = var.zone
-  size = 3
+  size = var.gamedata_disk_size
 }
 
 resource "google_compute_instance" "gameserver" {

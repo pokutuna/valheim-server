@@ -19,3 +19,8 @@ variable "instance_type" {
   type    = string
   default = "n1-standard-2"
 }
+
+variable "gamedata_disk_size" {
+  type    = number
+  default = 3 # GB
+}

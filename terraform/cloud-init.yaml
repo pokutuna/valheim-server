@@ -10,7 +10,7 @@ bootcmd:
 - mkdir -p /mnt/disks/gamedata/valheim/valheim_dl
 
 runcmd:
-- docker run -d --name valheim-server -p 2456-2458:2456-2458/udp -v /mnt/disks/gamedata/valheim/config:/config -v /mnt/disks/gamedata/valheim/valheim_dl:/opt/valheim_dl -e SERVER_NAME="popopopo" -e WORLD_NAME="pokutuna" -e SERVER_PASS="oneetyan" lloesche/valheim-server
+- docker run -d --name valheim-server -p 2456-2458:2456-2458/udp -v /mnt/disks/gamedata/valheim/config:/config -v /mnt/disks/gamedata/valheim/valheim_dl:/opt/valheim_dl -e SERVER_NAME="times_takuya-valheim" -e WORLD_NAME="karasumaoike" -e SERVER_PASS="******" -e UPDATE_INTERVAL=7200 lloesche/valheim-server
 
 # TODO
 # set log driver to Logging
