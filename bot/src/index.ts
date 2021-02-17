@@ -3,9 +3,14 @@ import '@google-cloud/functions-framework/build/src/invoker'; // for rawBody
 import type {Request, Response} from 'express'; // eslint-disable-line node/no-extraneous-import
 
 import * as nacl from 'tweetnacl';
+import {google} from 'googleapis';
+
+const project = 'fluid-unfolding-304704';
+const zone = 'asia-northeast1-b';
 
 const APP_PUBLIC_KEY =
   '2600c865e85f91f97799f52447dd826fc6a8b49cacc7e438649c987d6aeafc45';
+const COMMAND_NAME = 'server';
 
 export const app: HttpFunction = (req: Request, res: Response) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -20,7 +25,20 @@ export const app: HttpFunction = (req: Request, res: Response) => {
     return res.status(200).json({type: 1});
   }
 
-  return res.send(200);
+  if (req.body.type === 2 && req.body.data.name === COMMAND_NAME) {
+    (async () => {
+      const options = req.body.data.options[0];
+      const action = options.name;
+      const instance = options.options[0].value;
+      const message = await operate(action, instance);
+      return res.status(200).json({type: 4, data: {content: message}});
+    })().catch(err => {
+      console.error(err);
+      return res.status(200).json({type: 4, data: {content: err.message}});
+    });
+  } else {
+    return res.send(400);
+  }
 };
 
 // Security and Authorization
@@ -34,4 +52,37 @@ function verify(req: Request) {
     Buffer.from(signature, 'hex'),
     Buffer.from(APP_PUBLIC_KEY, 'hex')
   );
+}
+
+async function operate(action: string, instance: string): Promise<string> {
+  // Using googleapis, @google-cloud/compute doesn't provide ts types
+  const googleAuth = new google.auth.GoogleAuth({
+    scopes: ['https://www.googleapis.com/auth/compute'],
+  });
+  const auth = await googleAuth.getClient();
+
+  const params = {
+    project,
+    zone,
+    instance,
+    auth,
+  };
+
+  switch (action) {
+    case 'start': {
+      await google.compute('v1').instances.start(params);
+      // TODO send follow up message to show new IP
+      return 'starting...';
+    }
+    case 'stop':
+      await google.compute('v1').instances.stop(params);
+      return 'stopping...';
+    case 'status': {
+      const res = await google.compute('v1').instances.get(params);
+      const address = res.data.networkInterfaces?.[0].accessConfigs?.[0].natIP;
+      return `status: ${res.data.status}, address: ${address}:2457`;
+    }
+    default:
+      return '';
+  }
 }

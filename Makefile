@@ -35,3 +35,14 @@ terraform/keys/$(PROJECT).json:
 ssh:
 	# hard coded zone & instance
 	$(GCLOUD) beta compute ssh --zone "asia-northeast1-b" "valheim01"
+
+
+.PHONY: deploy-bot
+deploy-bot:
+	cd bot && yarn install && \
+	$(GCLOUD) functions deploy discordBot \
+		--region=asia-northeast1 \
+		--runtime=nodejs12 \
+		--trigger-http \
+		--allow-unauthenticated \
+		--entry-point=app

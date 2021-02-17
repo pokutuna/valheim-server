@@ -1,0 +1,8 @@
+# ignore all
+*
+
+# allowlist
+!.
+!package.json
+!yarn.lock
+!build/**

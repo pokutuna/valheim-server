@@ -16,8 +16,8 @@
     "dev": "concurrently 'tsc -w' 'nodemon --watch ./build/ --exec yarn run start'"
   },
   "dependencies": {
-    "@google-cloud/compute": "^2.4.3",
     "@google-cloud/functions-framework": "^1.7.1",
+    "googleapis": "^67.0.0",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
