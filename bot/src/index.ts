@@ -5,12 +5,10 @@ import type {Request, Response} from 'express'; // eslint-disable-line node/no-e
 import * as nacl from 'tweetnacl';
 import {google} from 'googleapis';
 
-const project = 'fluid-unfolding-304704';
-const zone = 'asia-northeast1-b';
-
-const APP_PUBLIC_KEY =
-  '2600c865e85f91f97799f52447dd826fc6a8b49cacc7e438649c987d6aeafc45';
-const COMMAND_NAME = 'server';
+const project = process.env.PROJECT_ID;
+const zone = process.env.COMPUTE_ENGINE_ZONE;
+const APP_PUBLIC_KEY = process.env.APP_PUBLIC_KEY;
+const COMMAND_NAME = process.env.COMMAND_NAME;
 
 export const app: HttpFunction = (req: Request, res: Response) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -50,7 +48,7 @@ function verify(req: Request) {
   return nacl.sign.detached.verify(
     Buffer.from(timestamp + req.rawBody),
     Buffer.from(signature, 'hex'),
-    Buffer.from(APP_PUBLIC_KEY, 'hex')
+    Buffer.from(APP_PUBLIC_KEY || '', 'hex')
   );
 }
 

@@ -45,4 +45,5 @@ deploy-bot:
 		--runtime=nodejs12 \
 		--trigger-http \
 		--allow-unauthenticated \
-		--entry-point=app
+		--entry-point=app \
+		--env-vars-file=.env.yaml

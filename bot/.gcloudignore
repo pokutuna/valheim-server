@@ -6,3 +6,4 @@
 !package.json
 !yarn.lock
 !build/**
+!.env.yaml
