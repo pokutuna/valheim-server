@@ -5,7 +5,6 @@ import type {Request, Response} from 'express'; // eslint-disable-line node/no-e
 import * as nacl from 'tweetnacl';
 import {google} from 'googleapis';
 
-const project = process.env.PROJECT_ID;
 const zone = process.env.COMPUTE_ENGINE_ZONE;
 const APP_PUBLIC_KEY = process.env.APP_PUBLIC_KEY;
 const COMMAND_NAME = process.env.COMMAND_NAME;
@@ -60,7 +59,7 @@ async function operate(action: string, instance: string): Promise<string> {
   const auth = await googleAuth.getClient();
 
   const params = {
-    project,
+    project: await googleAuth.getProjectId(),
     zone,
     instance,
     auth,
@@ -78,7 +77,10 @@ async function operate(action: string, instance: string): Promise<string> {
     case 'status': {
       const res = await google.compute('v1').instances.get(params);
       const address = res.data.networkInterfaces?.[0].accessConfigs?.[0].natIP;
-      return `status: ${res.data.status}, address: ${address}:2457`;
+      return (
+        `status: ${res.data.status}` +
+        (address ? `, address: ${address}:2457` : '')
+      );
     }
     default:
       return '';
