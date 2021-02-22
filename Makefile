@@ -4,7 +4,7 @@ GCLOUD := gcloud --project=$(PROJECT)
 TF_BACKEND_BUCKET := $(PROJECT)-tfstate
 
 .PHONY: init
-init: terraform-backend-bucket terraform-service-account terraform/keys/$(PROJECT).json terraform-init
+init: terraform-backend-bucket terraform-service-account terraform/keys/$(PROJECT).json terraform-init enable-services
 
 .PHONY: terraform-init
 terraform-init:
@@ -30,6 +30,20 @@ terraform/keys/$(PROJECT).json:
 	$(GCLOUD) iam service-accounts keys create ./terraform/keys/$(PROJECT).json \
 		--iam-account terraform@$(PROJECT).iam.gserviceaccount.com
 
+
+GCP_SERIVCES := \
+	compute.googleapis.com \
+	cloudapis.googleapis.com \
+	cloudbuild.googleapis.com \
+	cloudfunctions.googleapis.com \
+	monitoring.googleapis.com \
+	iam.googleapis.com
+
+.PHONY: enable-services
+enable-services:
+	for service in $(GCP_SERIVCES); do \
+		$(GCLOUD) services enable $$service; \
+	done
 
 .PHONY: ssh
 ssh:
