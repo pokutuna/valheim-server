@@ -5,6 +5,9 @@ resource "google_compute_disk" "gamedata" {
   size = var.gamedata_disk_size
 }
 
+data "google_compute_default_service_account" "default" {
+}
+
 resource "google_compute_instance" "gameserver" {
   name         = "valheim01"
   zone         = var.zone
@@ -38,6 +41,13 @@ resource "google_compute_instance" "gameserver" {
   metadata = {
     user-data = file("cloud-init.yaml")
   }
+
+  service_account {
+    email  = data.google_compute_default_service_account.default.email
+    scopes = ["cloud-platform"]
+  }
+
+  allow_stopping_for_update = true
 }
 
 
