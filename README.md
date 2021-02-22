@@ -47,6 +47,6 @@ $ cd terraform && terraform apply
 
 ## Docker image
 
-これ使っている
+[lloesche/valheim-server-docker: Valheim dedicated gameserver in Docker with automatic update and world backup support](https://github.com/lloesche/valheim-server-docker)
 
-- [lloesche/valheim-server-docker: Valheim dedicated gameserver in Docker with automatic update and world backup support](https://github.com/lloesche/valheim-server-docker)
+これ使っている、定期バックアップやアップデートの確認などがついてる
